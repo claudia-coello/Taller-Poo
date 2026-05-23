@@ -15,57 +15,68 @@ public class Main {
     Map<String, List<Pelicula>> listaPelisPorGenero = new HashMap<String, List<Pelicula>>();
 
 //    • Agrega un TreeSet para ordenar las películas por nombre.
-    Set<Pelicula> peliculasOrdenadas = new TreeSet<Pelicula>();
+    Set<Pelicula> peliculasOrdenadas = new TreeSet<>(Comparator.comparing(Pelicula::getNombre));
 
     Scanner sc = new Scanner(System.in);
 
 //    • Ordena las películas por duración dentro de List.
     public void ordenarPeliculaPorDuracion(List<Pelicula> lista){
-        lista.sort(Comparator.comparingDouble(Pelicula::getDuracion));
+
     }
 
 //    • Permite a los usuarios agregar nuevas películas dinámicamente con Scanner.
     public void agregarPelicula(Pelicula pelicula){
-        if (peliculasUnicas.contains(pelicula)) System.out.printf("Esa pelicula ya existe. Intentelo nuevamente");
+        if (peliculasUnicas.contains(pelicula)) System.out.println("Esa pelicula ya existe. Intentelo nuevamente");
         else {
             peliculasUnicas.add(pelicula);
+
             peliculas.add(pelicula);
+            peliculas.sort(Comparator.comparingDouble(Pelicula::getDuracion));
+
             peliculasOrdenadas.add(pelicula);
             listaPelisPorGenero.computeIfAbsent(pelicula.getGenero(),k -> new ArrayList<>()).add(pelicula);
         }
     }
 
 //    • Agrega funcionalidad para buscar una película dentro de List, Set y Map.
-    public void buscarPelicula(){
+    public void buscarPelicula(String pelicula){
 
     }
 
-    public void buscarPeliculaList(){
-
-    }
-    public void buscarPeliculaSet(){
-
-    }
-
-    public void buscarPeliculaMap(){
-
+    /**
+     * Lista las peliculas por su duracion(list)
+     */
+    public void listarPeliculaDuracion(){
+        for (Pelicula pelicula:peliculas){
+            System.out.println("Duracion: " + pelicula.getDuracion() + "\t\tNombre: " + pelicula.getNombre());
+        }
     }
 
-    public void listarPeliculasPorNombre(){
+    /**
+     * Lista las peliculas por su nombre(hash)
+     */
+    public void listarPeliculaNombre(){
 
     }
-    public void listarPeliculasPorGenero(){
 
+    /**
+     * Lista las peliculas por genero(map)
+     */
+    public void listarPeliculaGenero(){
+        for (String genero:listaPelisPorGenero.keySet()){
+            System.out.println("\n---Genero: " + genero + "---");
+            System.out.println("Peliculas: \n" + listaPelisPorGenero.get(genero));
+        }
     }
 
     public void mostrarMenu(){
         int opc = -1;
         while (opc!=0){
-            System.out.println("Ingrese 1 para listar peliculas");
-            System.out.println("Ingrese 2 para buscar una pelicula");
-            System.out.println("Ingrese 3 para agregar una pelicula");
-            System.out.println("Ingrese 4 para listar peliculas por genero");
-            System.out.println("Ingrese 0 para salir: ");
+            System.out.println("\t\t-----BIENVENIDO----");
+            System.out.println("1. Listar peliculas");
+            System.out.println("2. Buscar una pelicula");
+            System.out.println("3. Agregar una pelicula");
+            System.out.println("0. Salir: ");
 
             try {
                 opc = sc.nextInt();
@@ -76,10 +87,29 @@ public class Main {
 
             switch (opc){
                 case 1:
-                    listarPeliculasPorNombre();
+                    System.out.println("----Listar en orden segun----");
+                    System.out.println("1. Nombre");
+                    System.out.println("2. Duracion");
+                    System.out.println("3. Genero");
+                    System.out.println("Opcion: ");
+
+                    switch (sc.nextInt()){
+                        case 1:
+                            listarPeliculaNombre();
+                            break;
+                        case 2:
+                            listarPeliculaDuracion();
+                            break;
+                        case 3:
+                            listarPeliculaGenero();
+                            break;
+                        default:
+                            System.out.println("Opcion no valida");
+                            break;
+                    }
                     break;
                 case 2:
-                    buscarPelicula();
+                    buscarPelicula("");
                     break;
                 case 3:
                     System.out.println("Ingrese el nombre de la pelicula");
@@ -88,10 +118,8 @@ public class Main {
                     System.out.println("Ingrese la duracion de la pelicula");
                     agregarPelicula(new Pelicula("", "", "", 2));
                     break;
-                case 4:
-                    break;
                 case 0:
-                    System.out.println("Gracias por usarnos.");
+                    System.out.println("Gracias por preferirnos.");
                     break;
                 default:
                     System.out.println("Por favor ingrese una opcion valida.");
@@ -102,25 +130,16 @@ public class Main {
     }
 
     public void inicializarListaPeliculas(){
-        peliculas.add(new Pelicula("Tiburon", "Pedro", generos[3], 2.3));
-        peliculas.add(new Pelicula("El Hoyo", "Juan", generos[2], 1.5));
-        peliculas.add(new Pelicula("Sharknado", "Henry", generos[1], 2));
-        peliculas.add(new Pelicula("Bambi", "Disney", generos[0], 1.3));
+        agregarPelicula(new Pelicula("Tiburon", "Pedro", generos[3], 2.3));
+        agregarPelicula(new Pelicula("El Hoyo", "Juan", generos[2], 1.5));
+        agregarPelicula(new Pelicula("Sharknado", "Henry", generos[1], 2));
+        agregarPelicula(new Pelicula("Bambi", "Disney", generos[0], 1.3));
+        agregarPelicula(new Pelicula("Bambi", "Disney", generos[0], 1.3));
     }
 
     public static void main(String[] args) {
         Main main = new Main();
         main.inicializarListaPeliculas();
-        for(String genero:main.generos) main.listaPelisPorGenero.put(genero, new ArrayList<>());
-
-        main.peliculasUnicas.addAll(main.peliculas);
-
-//        for(String genero:main.listaPelisPorGenero.keySet()){
-//
-//        }
         main.mostrarMenu();
-
-
-
     }
 }
