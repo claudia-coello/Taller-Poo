@@ -9,10 +9,14 @@ public class Main {
     List<Pelicula> peliculas = new ArrayList<Pelicula>();
 
     //•	Evita que se agreguen películas repetidas gracias a HashSet.
-    Set<Pelicula> peliculasUnicas = new HashSet<Pelicula>(peliculas);
+    Set<Pelicula> peliculasUnicas = new HashSet<Pelicula>();
 
     //Cada género tiene una lista de películas almacenadas en un Map<String, List<Pelicula>>.
     Map<String, List<Pelicula>> listaPelisPorGenero = new HashMap<String, List<Pelicula>>();
+
+//    • Agrega un TreeSet para ordenar las películas por nombre.
+    Set<Pelicula> peliculasOrdenadas = new TreeSet<Pelicula>();
+
     Scanner sc = new Scanner(System.in);
 
 //    • Ordena las películas por duración dentro de List.
@@ -21,8 +25,14 @@ public class Main {
     }
 
 //    • Permite a los usuarios agregar nuevas películas dinámicamente con Scanner.
-    public void agregarPelicula(){
-
+    public void agregarPelicula(Pelicula pelicula){
+        if (peliculasUnicas.contains(pelicula)) System.out.printf("Esa pelicula ya existe. Intentelo nuevamente");
+        else {
+            peliculasUnicas.add(pelicula);
+            peliculas.add(pelicula);
+            peliculasOrdenadas.add(pelicula);
+            listaPelisPorGenero.computeIfAbsent(pelicula.getGenero(),k -> new ArrayList<>()).add(pelicula);
+        }
     }
 
 //    • Agrega funcionalidad para buscar una película dentro de List, Set y Map.
@@ -30,17 +40,31 @@ public class Main {
 
     }
 
-    public void listarPeliculas(){
+    public void buscarPeliculaList(){
+
+    }
+    public void buscarPeliculaSet(){
+
+    }
+
+    public void buscarPeliculaMap(){
+
+    }
+
+    public void listarPeliculasPorNombre(){
+
+    }
+    public void listarPeliculasPorGenero(){
 
     }
 
     public void mostrarMenu(){
         int opc = -1;
         while (opc!=0){
-            System.out.println("Ingrese 1 para listar las peliculas");
+            System.out.println("Ingrese 1 para listar peliculas");
             System.out.println("Ingrese 2 para buscar una pelicula");
             System.out.println("Ingrese 3 para agregar una pelicula");
-            System.out.println("Ingrese 4 para");
+            System.out.println("Ingrese 4 para listar peliculas por genero");
             System.out.println("Ingrese 0 para salir: ");
 
             try {
@@ -52,13 +76,17 @@ public class Main {
 
             switch (opc){
                 case 1:
-                    listarPeliculas();
+                    listarPeliculasPorNombre();
                     break;
                 case 2:
                     buscarPelicula();
                     break;
                 case 3:
-                    agregarPelicula();
+                    System.out.println("Ingrese el nombre de la pelicula");
+                    System.out.println("Ingrese el nombre del director de la pelicula");
+                    System.out.println("Ingrese el genero de la pelicula");
+                    System.out.println("Ingrese la duracion de la pelicula");
+                    agregarPelicula(new Pelicula("", "", "", 2));
                     break;
                 case 4:
                     break;
@@ -85,13 +113,14 @@ public class Main {
         main.inicializarListaPeliculas();
         for(String genero:main.generos) main.listaPelisPorGenero.put(genero, new ArrayList<>());
 
+        main.peliculasUnicas.addAll(main.peliculas);
+
 //        for(String genero:main.listaPelisPorGenero.keySet()){
 //
 //        }
         main.mostrarMenu();
 
 
-//    • Agrega un TreeSet para ordenar las películas por nombre.
 
     }
 }
