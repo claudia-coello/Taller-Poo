@@ -1,40 +1,33 @@
-package taller.test;
-
-import taller.clases.Pelicula;
+package taller.clases;
 
 import java.util.*;
 
-public class Main {
-    String[] generos = {"Fantasia", "Accion", "Terror", "Ciencia Ficcion"};
-    List<Pelicula> peliculas = new ArrayList<Pelicula>();
+public class CrudPeliculas {
+    private String[] generos = {"Fantasia", "Accion", "Terror", "Ciencia Ficcion"};
+    private List<Pelicula> listaPeliculas = new ArrayList<Pelicula>();
 
     //•	Evita que se agreguen películas repetidas gracias a HashSet.
-    Set<Pelicula> peliculasUnicas = new HashSet<Pelicula>();
+    private Set<Pelicula> hashPeliculas = new HashSet<Pelicula>();
 
     //Cada género tiene una lista de películas almacenadas en un Map<String, List<Pelicula>>.
-    Map<String, List<Pelicula>> listaPelisPorGenero = new HashMap<String, List<Pelicula>>();
+    private Map<String, List<Pelicula>> mapPeliculas = new HashMap<String, List<Pelicula>>();
 
 //    • Agrega un TreeSet para ordenar las películas por nombre.
-    Set<Pelicula> peliculasOrdenadas = new TreeSet<>(Comparator.comparing(Pelicula::getNombre));
+    private Set<Pelicula> treePeliculas = new TreeSet<>(Comparator.comparing(Pelicula::getNombre));
 
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
 
-//    • Ordena las películas por duración dentro de List.
-    public void ordenarPeliculaPorDuracion(List<Pelicula> lista){
-
-    }
-
-//    • Permite a los usuarios agregar nuevas películas dinámicamente con Scanner.
     public void agregarPelicula(Pelicula pelicula){
-        if (peliculasUnicas.contains(pelicula)) System.out.println("Esa pelicula ya existe. Intentelo nuevamente");
+        if (hashPeliculas.contains(pelicula)) System.out.println("Esa pelicula ya existe. Intentelo nuevamente");
         else {
-            peliculasUnicas.add(pelicula);
+            hashPeliculas.add(pelicula);
 
-            peliculas.add(pelicula);
-            peliculas.sort(Comparator.comparingDouble(Pelicula::getDuracion));
+            listaPeliculas.add(pelicula);
+//    • Ordena las películas por duración dentro de List.
+            listaPeliculas.sort(Comparator.comparingDouble(Pelicula::getDuracion));
 
-            peliculasOrdenadas.add(pelicula);
-            listaPelisPorGenero.computeIfAbsent(pelicula.getGenero(),k -> new ArrayList<>()).add(pelicula);
+            treePeliculas.add(pelicula);
+            mapPeliculas.computeIfAbsent(pelicula.getGenero(), k -> new ArrayList<>()).add(pelicula);
         }
     }
 
@@ -47,7 +40,7 @@ public class Main {
      * Lista las peliculas por su duracion(list)
      */
     public void listarPeliculaDuracion(){
-        for (Pelicula pelicula:peliculas){
+        for (Pelicula pelicula: listaPeliculas){
             System.out.println("Duracion: " + pelicula.getDuracion() + "\t\tNombre: " + pelicula.getNombre());
         }
     }
@@ -56,16 +49,16 @@ public class Main {
      * Lista las peliculas por su nombre(hash)
      */
     public void listarPeliculaNombre(){
-
+        for(Pelicula p:treePeliculas) System.out.println("Nombre: " + p.getNombre());
     }
 
     /**
      * Lista las peliculas por genero(map)
      */
     public void listarPeliculaGenero(){
-        for (String genero:listaPelisPorGenero.keySet()){
+        for (String genero: mapPeliculas.keySet()){
             System.out.println("\n---Genero: " + genero + "---");
-            System.out.println("Peliculas: \n" + listaPelisPorGenero.get(genero));
+            System.out.println("Peliculas: \n" + mapPeliculas.get(genero));
         }
     }
 
@@ -112,7 +105,9 @@ public class Main {
                     buscarPelicula("");
                     break;
                 case 3:
+//    • Permite a los usuarios agregar nuevas películas dinámicamente con Scanner.
                     System.out.println("Ingrese el nombre de la pelicula");
+
                     System.out.println("Ingrese el nombre del director de la pelicula");
                     System.out.println("Ingrese el genero de la pelicula");
                     System.out.println("Ingrese la duracion de la pelicula");
@@ -130,16 +125,9 @@ public class Main {
     }
 
     public void inicializarListaPeliculas(){
+        agregarPelicula(new Pelicula("Bambi", "Disney", generos[0], 1.3));
+        agregarPelicula(new Pelicula("El Hoyo", "Juan", generos[2], 2.1));
+        agregarPelicula(new Pelicula("Sharknado", "Henry", generos[1], 1.45));
         agregarPelicula(new Pelicula("Tiburon", "Pedro", generos[3], 2.3));
-        agregarPelicula(new Pelicula("El Hoyo", "Juan", generos[2], 1.5));
-        agregarPelicula(new Pelicula("Sharknado", "Henry", generos[1], 2));
-        agregarPelicula(new Pelicula("Bambi", "Disney", generos[0], 1.3));
-        agregarPelicula(new Pelicula("Bambi", "Disney", generos[0], 1.3));
-    }
-
-    public static void main(String[] args) {
-        Main main = new Main();
-        main.inicializarListaPeliculas();
-        main.mostrarMenu();
     }
 }
