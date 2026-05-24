@@ -18,6 +18,7 @@ public class CrudPeliculas {
     private Scanner sc = new Scanner(System.in);
 
     public void agregarPelicula(Pelicula pelicula){
+        if (pelicula == null) System.out.println("Por favor llene las informacion correspondiente");
         if (hashPeliculas.contains(pelicula)) System.out.println("Esa pelicula ya existe. Intentelo nuevamente");
         else {
             hashPeliculas.add(pelicula);
@@ -32,8 +33,35 @@ public class CrudPeliculas {
     }
 
 //    • Agrega funcionalidad para buscar una película dentro de List, Set y Map.
-    public void buscarPelicula(String pelicula){
-
+    public Pelicula buscarPeliculaLista(String nombre) {
+        for (Pelicula p : listaPeliculas) {
+            if (p.getNombre().equalsIgnoreCase(nombre)) {
+                System.out.println("Encontrada en List: " + p);
+                return p;
+            }
+        }
+        System.out.println("No encontrada en List");
+        return null;
+    }
+    public void buscarPeliculaSet(String nombre) {
+        for (Pelicula p : hashPeliculas.toArray(new Pelicula[0])) {
+            if (p.getNombre().equalsIgnoreCase(nombre)) {
+                System.out.println("Encontrada en Set: " + p);
+                return;
+            }
+        }
+        System.out.println("No encontrada en Set");
+    }
+    public void buscarPeliculaMap(String nombre) {
+        for (List<Pelicula> listaGenero : mapPeliculas.values()) {
+            for (Pelicula p : listaGenero) {
+                if (p.getNombre().equalsIgnoreCase(nombre)) {
+                    System.out.println("Encontrada en Map: " + p);
+                    return;
+                }
+            }
+        }
+        System.out.println("No encontrada en Map");
     }
 
     /**
@@ -63,9 +91,11 @@ public class CrudPeliculas {
     }
 
     public void mostrarMenu(){
+        inicializarListaPeliculas();
+
         int opc = -1;
         while (opc!=0){
-            System.out.println("\t\t-----BIENVENIDO----");
+            System.out.println("\t\t-----BIENVENIDO-----");
             System.out.println("1. Listar peliculas");
             System.out.println("2. Buscar una pelicula");
             System.out.println("3. Agregar una pelicula");
@@ -102,7 +132,32 @@ public class CrudPeliculas {
                     }
                     break;
                 case 2:
-                    buscarPelicula("");
+                    System.out.println("----Buscar pelicula en----");
+                    System.out.println("1. List");
+                    System.out.println("2. Set");
+                    System.out.println("3. Map");
+                    System.out.println("Opcion: ");
+
+                    int opcionBusqueda = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.println("Ingrese el nombre de la pelicula:");
+                    String nombreBuscar = sc.nextLine();
+
+                    switch (opcionBusqueda) {
+                        case 1:
+                            Pelicula encontradaLista = buscarPeliculaLista(nombreBuscar);
+                            if (encontradaLista == null) System.out.println("No se encontro");
+                            break;
+                        case 2:
+                            buscarPeliculaSet(nombreBuscar);
+                            break;
+                        case 3:
+                            buscarPeliculaMap(nombreBuscar);
+                            break;
+                        default:
+                            System.out.println("Opcion no valida");
+                    }
                     break;
                 case 3:
 //    • Permite a los usuarios agregar nuevas películas dinámicamente con Scanner.
