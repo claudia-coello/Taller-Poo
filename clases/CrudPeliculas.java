@@ -100,7 +100,6 @@ public class CrudPeliculas {
             System.out.println("2. Buscar una pelicula");
             System.out.println("3. Agregar una pelicula");
             System.out.println("0. Salir: ");
-
             try {
                 opc = sc.nextInt();
                 sc.nextLine();
@@ -147,7 +146,7 @@ public class CrudPeliculas {
                     switch (opcionBusqueda) {
                         case 1:
                             Pelicula encontradaLista = buscarPeliculaLista(nombreBuscar);
-                            if (encontradaLista == null) System.out.println("No se encontro");
+                            if (encontradaLista == null) System.out.println("Buscalo con otro nombre");
                             break;
                         case 2:
                             buscarPeliculaSet(nombreBuscar);
@@ -160,13 +159,28 @@ public class CrudPeliculas {
                     }
                     break;
                 case 3:
+                    String nombre;
+                    String director;
+                    String genero;
+                    double duracion;
+                    int yearEstreno;
+                    double puntuacion;
+
 //    • Permite a los usuarios agregar nuevas películas dinámicamente con Scanner.
                     System.out.println("Ingrese el nombre de la pelicula");
-
+                    nombre = sc.nextLine();
                     System.out.println("Ingrese el nombre del director de la pelicula");
-                    System.out.println("Ingrese el genero de la pelicula");
+                    director = sc.nextLine();
+                    System.out.println("Ingrese el genero (Fantasia, Accion, Terror, Ciencia Ficcion) de la pelicula");
+                    genero = sc.nextLine();
                     System.out.println("Ingrese la duracion de la pelicula");
-                    agregarPelicula(new Pelicula("", "", "", 2));
+                    duracion = sc.nextDouble();
+                    System.out.println("Ingrese anio de estreno de la pelicula");
+                    yearEstreno = sc.nextInt();
+                    System.out.println("Ingrese la puntuacion de la pelicula");
+                    puntuacion = sc.nextDouble();
+
+                    agregarPelicula(new Pelicula(nombre, director, genero, duracion, puntuacion, yearEstreno));
                     break;
                 case 0:
                     System.out.println("Gracias por preferirnos.");
@@ -180,9 +194,9 @@ public class CrudPeliculas {
     }
 
     public void inicializarListaPeliculas(){
-        agregarPelicula(new Pelicula("Bambi", "Disney", generos[0], 1.3));
-        agregarPelicula(new Pelicula("El Hoyo", "Juan", generos[2], 2.1));
-        agregarPelicula(new Pelicula("Sharknado", "Henry", generos[1], 1.45));
-        agregarPelicula(new Pelicula("Tiburon", "Pedro", generos[3], 2.3));
+        agregarPelicula(new Pelicula("Bambi", "Disney", generos[0], 1.3, 4.5, 1945));
+        agregarPelicula(new Pelicula("El Hoyo", "Juan", generos[2], 2.1, 4.0, 2016));
+        agregarPelicula(new Pelicula("Sharknado", "Henry", generos[1], 1.52, 3.7, 2000));
+        agregarPelicula(new Pelicula("Tiburon", "Pedro", generos[3], 2.3, 4.2, 1992));
     }
 }

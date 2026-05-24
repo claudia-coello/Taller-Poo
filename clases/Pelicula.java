@@ -17,7 +17,7 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
-    public Pelicula(String nombre, String director, double duracion, String genero, double rating, int yearEstreno) {
+    public Pelicula(String nombre, String director, String genero, double duracion, double rating, int yearEstreno) {
         this.nombre = nombre;
         this.director = director;
         this.duracion = duracion;
